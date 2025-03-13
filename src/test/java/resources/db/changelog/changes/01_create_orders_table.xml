@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="1" author="Esteban Cabezudo">
+
+    <createTable tableName="users">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="username" type="varchar(50)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="password" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role" type="varchar(50)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="orders">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="customer_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="product_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="quantity" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="price" type="DECIMAL(10,2)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="status" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="updated_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>
