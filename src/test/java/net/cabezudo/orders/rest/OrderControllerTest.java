@@ -1,17 +1,25 @@
 package net.cabezudo.orders.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.cabezudo.Application;
+import net.cabezudo.caches.RedisConfig;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.support.NoOpCacheManager;
-import org.springframework.core.env.Environment;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -23,20 +31,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@SpringBootTest
 class OrderControllerTest {
+
+  @TestConfiguration
+  static class TestCacheConfig {
+    @Bean
+    @Primary
+    public CacheManager cacheManager() {
+      return new ConcurrentMapCacheManager("productCache", "ordersCache");
+    }
+  }
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
   private ObjectMapper objectMapper;
-
-  @Autowired
-  CacheManager cacheManager;
-
 
   @Test
   void testOrderNotFound() throws Exception {
